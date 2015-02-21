@@ -4,7 +4,13 @@ SmartlingRails is a gem making localization with the [smartling](www.smartling.c
 Communication with smartling is done via their APIs and leverages the [smartling gem](https://rubygems.org/gems/smartling).
 
 ## overview
-The uploading of [rials i18n](http://guides.rubyonrails.org/i18n.html) files to smartling, monitoring their translation status, and pulling them all back down into your `config/localization` folder is a very manual process.
+The uploading of [rials I18N](http://guides.rubyonrails.org/i18n.html) files to smartling, monitoring their translation status, and pulling them all back down into your `config/localization` folder is a very manual process.
+
+We wanted to create a way to simplify the process of localization within our project workflow and automate as much of the process as possible.
+
+This gem is a core part of that automation because it understands how to safely send I18N files to smarling and safely retrieve their translated counterparts back.
+
+Translating files with smartling is now as easy a little configuration and two commands.
 
 
 ## usage
@@ -78,7 +84,7 @@ The configuration of how smartling_rails processes information to/from your appl
 
 Local `.env` file
 >SMARTLING_API_KEY=[your_smartling_api_key]
->SMARTLING_PROJECT_ID=[your_project_id]
+SMARTLING_PROJECT_ID=[your_project_id]
 
 ENV (pending)
 Yaml (pending)

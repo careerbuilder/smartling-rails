@@ -84,7 +84,8 @@ The configuration of how smartling_rails processes information to/from your appl
 
 Local `.env` file
 >SMARTLING_API_KEY=[your_smartling_api_key]
-SMARTLING_PROJECT_ID=[your_project_id]
+
+>SMARTLING_PROJECT_ID=[your_project_id]
 
 ENV (pending)
 Yaml (pending)

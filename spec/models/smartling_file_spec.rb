@@ -56,6 +56,15 @@ module SmartlingRails
         expect(smartling_file.file_contents).to eq @corrected_yaml
       end
     end
+
+    describe 'print_contents' do
+      it 'calls puts with the file_contents' do
+        allow($stdout).to receive(:puts) { "mock puts" }
+        smartling_file.print_contents
+        expect($stdout).to have_received(:puts).once
+        expect($stdout).to have_received(:puts).with(@raw_yaml)
+      end
+    end
   end
 end
  

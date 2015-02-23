@@ -30,7 +30,7 @@ module SmartlingRails
         file_complete = completed_strings >= total_strings 
         SmartlingRails.print_msg "#{language_code} completed: #{file_complete} (#{completed_strings} / #{total_strings})"
       rescue Exception => e
-        puts e
+        puts e.message
       end
     end
 
@@ -49,7 +49,7 @@ module SmartlingRails
     end
 
     def upload_file_path()
-      "/files/adam-test-resume-[#{get_current_branch}]-en-us-.yml"
+      "/files/adam-test-resume-[#{get_current_branch}]-en-us.yml"
     end
 
     def get_files

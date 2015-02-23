@@ -4,8 +4,10 @@ module SmartlingRails
   describe SmartlingProcessor do
     
     let(:processor) { SmartlingRails::SmartlingProcessor.new}
+    let(:my_smartling) {double('my_smartling', :status => nil)}
     before {
       SmartlingRails.configuration
+      processor.my_smartling = my_smartling
     }
 
     describe 'initialize' do
@@ -14,7 +16,9 @@ module SmartlingRails
     end
 
     describe 'get_file_statuses' do
-      it 'should loop over locales and check each status' do
+      it 'loops over locales and checks each one' do
+        processor.should_receive(:check_file_status).at_least(SmartlingRails.configuration.locales.count).times
+        processor.get_file_statuses
       end
     end
 
@@ -25,7 +29,25 @@ module SmartlingRails
     end
 
     describe 'check_file_status' do
-      it 'xxx' do
+      it 'gracefully handles lack of smartling credentials' do
+        allow($stdout).to receive(:puts) { "mock puts" }
+        allow(my_smartling).to receive(:status) { raise "Missing parameters: [:apiKey, :projectId]" }
+        processor.check_file_status('fr-FR')
+        expect($stdout).to have_received(:puts).with('Missing parameters: [:apiKey, :projectId]')
+      end
+      it 'knows when processing is comlete' do
+        allow($stdout).to receive(:puts) { "mock puts" }
+        result = {"fileUri"=>"/files/adam-test-resume-[ver-interim-translations]-en-us-.yml", "lastUploaded"=>"2015-02-21T19:56:23", "stringCount"=>161, "fileType"=>"yaml", "wordCount"=>664, "callbackUrl"=>nil, "approvedStringCount"=>161, "completedStringCount"=>161}
+        allow(my_smartling).to receive(:status).and_return(result)
+        processor.check_file_status('fr-FR')
+        expect($stdout).to have_received(:puts).with('fr-FR completed: true (161 / 161)')
+      end
+      it 'knows when processing is not comlete' do
+        allow($stdout).to receive(:puts) { "mock puts" }
+        result = {"fileUri"=>"/files/adam-test-resume-[ver-interim-translations]-en-us-.yml", "lastUploaded"=>"2015-02-21T19:56:23", "stringCount"=>161, "fileType"=>"yaml", "wordCount"=>664, "callbackUrl"=>nil, "approvedStringCount"=>10, "completedStringCount"=>16}
+        allow(my_smartling).to receive(:status).and_return(result)
+        processor.check_file_status('fr-FR')
+        expect($stdout).to have_received(:puts).with('fr-FR completed: false (16 / 161)')
       end
     end
 

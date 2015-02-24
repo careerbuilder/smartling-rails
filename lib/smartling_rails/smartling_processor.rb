@@ -3,7 +3,6 @@ module SmartlingRails
     attr_accessor :my_smartling
 
     def initialize()
-      puts SmartlingRails.configuration
       @my_smartling = Smartling::File.new(:apiKey => SmartlingRails.api_key, :projectId => SmartlingRails.project_id)
       #@my_smartling = Smartling::File.sandbox(:apiKey => @@api_key, :projectId => @@project_id)
       #puts @my_smartling.list

@@ -9,7 +9,7 @@ module SmartlingRails
     let(:mock_raw_french_yaml) { "---\nfr-FR:\n    test: \n        hello: 'bonjour'" }
     let(:mock_raw_smartling_file) { SmartlingRails::SmartlingFile.new(mock_raw_french_yaml, mock_french_locale) }
     before {
-      SmartlingRails.configuration
+      SmartlingRails.configure { |config| config.rails_app_name = 'mock-app' }
       processor.my_smartling = my_smartling
     }
 
@@ -80,9 +80,9 @@ module SmartlingRails
     end
 
     describe 'upload_file_path' do
-
       it 'returns the constructed path for smartling' do
-        expect(processor.upload_file_path).to eq "/files/adam-test-resume-[mock_branch]-en-us.yml"
+        allow(processor).to receive(:get_current_branch).and_return("mock-branch")
+        expect(processor.upload_file_path).to eq "/files/[mock-app]-[mock_branch]-en-us.yml"
       end
     end
 

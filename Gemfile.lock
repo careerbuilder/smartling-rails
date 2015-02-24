@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    smartling_rails (0.0.2)
+    smartling_rails (0.0.4)
       smartling (~> 0.5)
 
 GEM

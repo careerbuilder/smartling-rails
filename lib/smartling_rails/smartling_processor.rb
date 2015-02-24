@@ -48,7 +48,7 @@ module SmartlingRails
     end
 
     def upload_file_path()
-      "/files/smartling-rails-[APPNAME]-[#{get_current_branch}]-en-us.yml"
+      "/files/[#{SmartlingRails.configuration.rails_app_name}]-[#{get_current_branch}]-en-us.yml"
     end
 
     def get_files

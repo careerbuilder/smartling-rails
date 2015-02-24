@@ -1,6 +1,6 @@
 module SmartlingRails
   class Config
-    attr_accessor :api_key, :project_id, :locales
+    attr_accessor :api_key, :project_id, :rails_app_name, :locales
 
     def initialize
       #TODO source from yaml file
@@ -23,6 +23,7 @@ module SmartlingRails
           key_val = line.split("=")
           @api_key = key_val[1].strip if key_val[0] == 'SMARTLING_API_KEY'
           @project_id = key_val[1].strip if key_val[0] == 'SMARTLING_PROJECT_ID'
+          @rails_app_name = key_val[1].strip if key_val[0] == 'SMARTLING_APP_NAME'
         end
       end unless !File.exist?('.env')
     end

@@ -123,6 +123,8 @@ Local `.env` file
 
 >SMARTLING_PROJECT_ID=[your_project_id]
 
+>SMARTLING_APP_NAME=[your_app name_id]
+
 ENV (pending)
 Yaml (pending)
 

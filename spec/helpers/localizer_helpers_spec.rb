@@ -14,7 +14,7 @@ module SmartlingRails
         allow($stdout).to receive(:puts) { "mock puts" }
         SmartlingRails.print_msg 'hello world', true
         expect($stdout).to have_received(:puts).twice
-        expect($stdout).to have_received(:puts).with()
+        expect($stdout).to have_received(:puts).with
         expect($stdout).to have_received(:puts).with('hello world')
       end
     end

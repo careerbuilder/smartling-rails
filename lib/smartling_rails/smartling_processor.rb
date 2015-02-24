@@ -49,7 +49,7 @@ module SmartlingRails
     end
 
     def upload_file_path()
-      "/files/adam-test-resume-[#{get_current_branch}]-en-us.yml"
+      "/files/smartling-rails-[APPNAME]-[#{get_current_branch}]-en-us.yml"
     end
 
     def get_files

@@ -63,6 +63,42 @@ Fixing Issues:
 
 ```
 
+## usage: rake commands
+
+This gem comes fully equiped with rake commands to help leverage the gem from the command line.
+
+Once you've installed the gem using `gem install smartling_rails` or by adding `gem 'smartling_rails', '~> 0.0.4'` to your **Gemfile** you can update your **Rakefile** with the following lines:
+
+```
+spec = Gem::Specification.find_by_name 'smartling_rails'
+load "#{spec.gem_dir}/lib/tasks/smartling_rails.rake"
+```
+
+This will allow you to perform the following from the command line:
+
+```
+$> bundle exec rake -T
+   ...
+   rake smartling:get          # download the translations ...
+   rake smartling:put          # upload the en-us.yml file...
+   rake smartling:status       # check statuses
+   ...
+
+$> bundle exec rake smartling:put
+$> bundle exec rake smartling:status
+$> bundle exec rake smartling:status
+    Attempting to get translation statuses:
+
+    You are working with this remote file on smartling: /files/smartling-rails-[APPNAME]-[BRANCHNAME]-en-us.yml
+    Smartling Ruby client 0.5.1
+
+    Checking status for ["French fr-FR", "German de-DE", "Dutch nl-NL"]
+    fr-FR completed: false (158 / 161)
+    de-DE completed: true (161 / 161)
+    ...
+```
+
+
 ## structure
 The smartling_rails gem consists of 3 components
 

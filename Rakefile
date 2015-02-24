@@ -1,4 +1,6 @@
+
 require 'bundler'
+import "./lib/tasks/smartling_rails.rake"
 Bundler::GemHelper.install_tasks
 
 require 'rspec/core/rake_task'

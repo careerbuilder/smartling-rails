@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = 'Smartling support library for automation of rails platforms using I18N'
   s.description = 'Smartling support library for automation of rails platforms using I18N'
 
-  s.files        = Dir['{lib}/**/*.rb', '*.md']
+  s.files        = Dir['{lib}/**/*.rb', '*.md', '{lib}/tasks/*.rake']
   s.require_path = 'lib'
 
   s.add_dependency 'smartling', '~> 0.5'

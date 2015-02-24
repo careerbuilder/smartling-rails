@@ -30,7 +30,7 @@ module SmartlingRails
         file_complete = completed_strings >= total_strings 
         SmartlingRails.print_msg "#{language_code} completed: #{file_complete} (#{completed_strings} / #{total_strings})"
       rescue Exception => e
-        puts e
+        puts e.message
       end
     end
 
@@ -49,7 +49,7 @@ module SmartlingRails
     end
 
     def upload_file_path()
-      "/files/adam-test-resume-en-us-[#{get_current_branch}].yml"
+      "/files/smartling-rails-[APPNAME]-[#{get_current_branch}]-en-us.yml"
     end
 
     def get_files
@@ -80,8 +80,6 @@ module SmartlingRails
     def save_to_local_file(file_contents, cb_locale)
       File.open(local_file_path_for_locale(cb_locale), 'w') { |file| file.write(file_contents) }
     end
-
-    
 
     def get_current_branch
       b = `git branch`.split("\n").delete_if { |i| i[0] != "*" }

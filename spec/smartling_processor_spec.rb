@@ -5,6 +5,9 @@ module SmartlingRails
     
     let(:processor) { SmartlingRails::SmartlingProcessor.new}
     let(:my_smartling) {double('my_smartling', :status => nil)}
+    let(:mock_french_locale) { {smartling: 'fr-FR', careerbuilder: 'fr-fr'} }
+    let(:mock_raw_french_yaml) { "---\nfr-FR:\n    test: \n        hello: 'bonjour'" }
+    let(:mock_raw_smartling_file) { SmartlingRails::SmartlingFile.new(mock_raw_french_yaml, mock_french_locale) }
     before {
       SmartlingRails.configuration
       processor.my_smartling = my_smartling
@@ -52,12 +55,20 @@ module SmartlingRails
     end
 
     describe 'put_files' do
-      it 'xxx' do
+      it 'calls upload_english_file' do
+        allow(processor).to receive(:upload_english_file) { "mock puts" }
+        processor.put_files()
+        expect(processor).to have_received(:upload_english_file).once
       end
     end
 
     describe 'upload_english_file' do
-      it 'xxx' do
+      it 'calls smartling upload with the correct files and types' do
+        processor.should_receive(:`).at_least(1).times.with("git branch").and_return("* mock-branch\n  master\n  update-readme")
+        allow($stdout).to receive(:puts) { "mock puts" }
+        allow(my_smartling).to receive(:upload).and_return('')
+        processor.upload_english_file()
+        expect(my_smartling).to have_received(:upload).once.with('config/locales/en-us.yml', '/files/adam-test-resume-[mock-branch]-en-us.yml', 'YAML')
       end
     end
 
@@ -76,26 +87,52 @@ module SmartlingRails
     end
 
     describe 'get_files' do
-      it 'xxx' do
+      it 'should call fetch_fix_and_save_file_for_locale for each locale' do
+        processor.should_receive(:fetch_fix_and_save_file_for_locale).at_least(SmartlingRails.configuration.locales.count).times
+        processor.get_files
       end
     end
 
     describe 'fetch_fix_and_save_file_for_locale' do
-      it 'xxx' do
+      it 'calls get_file_for_locale' do
+        allow(processor).to receive(:get_file_for_locale).and_return(mock_raw_smartling_file)
+        allow(processor).to receive(:save_to_local_file).and_return('')
+        processor.fetch_fix_and_save_file_for_locale(mock_french_locale)
+        expect(processor).to have_received(:get_file_for_locale).with(mock_french_locale)
+      end
+      it 'calls fix_file_issues on the smartling_file' do
+        allow(processor).to receive(:get_file_for_locale).and_return(mock_raw_smartling_file)
+        allow(processor).to receive(:save_to_local_file).and_return('')
+        processor.fetch_fix_and_save_file_for_locale(mock_french_locale)
+        expect(mock_raw_smartling_file).to have_received(:fix_file_issues)
+      end
+      it 'retrieves the file from smartling' do
+        allow(processor).to receive(:get_file_for_locale).and_return(mock_raw_smartling_file)
+        allow(processor).to receive(:save_to_local_file).and_return('')
+        processor.fetch_fix_and_save_file_for_locale(mock_french_locale)
+        expect(processor).to have_received(:save_to_local_file)
       end
     end
 
     describe 'get_file_for_locale' do
       it 'initializes a smartling_file object' do
-        mock_french_locale = {smartling: 'fr-FR', careerbuilder: 'fr-fr'}
         smartling_file = processor.get_file_for_locale(SmartlingRails.locales[:French])
         expect(smartling_file.file_contents).to eq ''
         expect(smartling_file.locale_codes).to eq mock_french_locale
       end
+
+      it 'initializes a smartling_file object' do
+        allow(my_smartling).to receive(:download).and_return('file from smartling')
+        smartling_file = processor.get_file_for_locale(SmartlingRails.locales[:French])
+        expect(smartling_file.file_contents).to eq 'file from smartling'
+      end
     end
 
     describe 'save_to_local_file' do
-      it 'xxx' do
+      it 'calls file open with the right params' do
+        allow(File).to receive(:open)
+        processor.save_to_local_file('file contnents', 'fr-fr')
+        expect(File).to have_received(:open)
       end
     end
 

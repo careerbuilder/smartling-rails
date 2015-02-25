@@ -1,6 +1,7 @@
 require 'simplecov'
 require 'pry'
 require 'ostruct'
+require 'yaml'
 
 SimpleCov.start do
   add_filter '/spec/'

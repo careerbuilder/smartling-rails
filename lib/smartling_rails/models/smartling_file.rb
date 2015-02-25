@@ -36,7 +36,7 @@ module SmartlingRails
     
     def fix_locale_root_node
       puts '  converting smartling locale code to CB locale code'
-      @file_contents.sub!(locale_codes[:smartling],locale_codes[:careerbuilder])
+      @file_contents.sub!(locale_codes['smartling'],locale_codes['custom'])
     end
     
     def print_contents

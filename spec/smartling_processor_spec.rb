@@ -5,10 +5,13 @@ module SmartlingRails
     
     let(:processor) { SmartlingRails::SmartlingProcessor.new}
     let(:my_smartling) {double('my_smartling', :status => nil)}
-    let(:mock_french_locale) { {smartling: 'fr-FR', careerbuilder: 'fr-fr'} }
+    let(:mock_french_locale) { {'smartling' => 'fr-FR', 'custom' => 'fr-fr'} }
     let(:mock_raw_french_yaml) { "---\nfr-FR:\n    test: \n        hello: 'bonjour'" }
     let(:mock_raw_smartling_file) { SmartlingRails::SmartlingFile.new(mock_raw_french_yaml, mock_french_locale) }
     before {
+      allow(File).to receive(:exist?).with('config/smartling_rails.yml').and_return(true)
+      allow(File).to receive(:exist?).with('.env').and_return(false)
+      allow(YAML).to receive(:load_file).and_return({'locales' => {'French' => {'smartling' => 'fr-FR', 'custom' => 'fr-fr'}, 'German' => {'smartling' => 'de-DE', 'custom' => 'de-de'} } })
       SmartlingRails.configure { |config| config.rails_app_name = 'mock-app' }
       processor.my_smartling = my_smartling
     }
@@ -27,7 +30,7 @@ module SmartlingRails
 
     describe 'supported_locales' do
       it 'should return an output friendly array of supported locales' do
-        expect(processor.supported_locales).to eq ["French fr-FR", "German de-DE", "Dutch nl-NL", "Italian it-IT", "Swedish sv-SE", "Chinese zh-CN", "Spanish es-ES", "FrenchCanadian fr-CA", "Greek el-GR"]
+        expect(processor.supported_locales).to eq ["French fr-FR", "German de-DE"]
       end
     end
 
@@ -40,14 +43,14 @@ module SmartlingRails
       end
       it 'knows when processing is comlete' do
         allow($stdout).to receive(:puts) { "mock puts" }
-        result = {"fileUri"=>"/files/adam-test-resume-[ver-interim-translations]-en-us-.yml", "lastUploaded"=>"2015-02-21T19:56:23", "stringCount"=>161, "fileType"=>"yaml", "wordCount"=>664, "callbackUrl"=>nil, "approvedStringCount"=>161, "completedStringCount"=>161}
+        result = {"fileUri"=>"/files/[mock-app]-[mock-branch]-en-us-.yml", "lastUploaded"=>"2015-02-21T19:56:23", "stringCount"=>161, "fileType"=>"yaml", "wordCount"=>664, "callbackUrl"=>nil, "approvedStringCount"=>161, "completedStringCount"=>161}
         allow(my_smartling).to receive(:status).and_return(result)
         processor.check_file_status('fr-FR')
         expect($stdout).to have_received(:puts).with('fr-FR completed: true (161 / 161)')
       end
       it 'knows when processing is not comlete' do
         allow($stdout).to receive(:puts) { "mock puts" }
-        result = {"fileUri"=>"/files/adam-test-resume-[ver-interim-translations]-en-us-.yml", "lastUploaded"=>"2015-02-21T19:56:23", "stringCount"=>161, "fileType"=>"yaml", "wordCount"=>664, "callbackUrl"=>nil, "approvedStringCount"=>10, "completedStringCount"=>16}
+        result = {"fileUri"=>"/files/[mock-app]-[ver-interim-translations]-en-us-.yml", "lastUploaded"=>"2015-02-21T19:56:23", "stringCount"=>161, "fileType"=>"yaml", "wordCount"=>664, "callbackUrl"=>nil, "approvedStringCount"=>10, "completedStringCount"=>16}
         allow(my_smartling).to receive(:status).and_return(result)
         processor.check_file_status('fr-FR')
         expect($stdout).to have_received(:puts).with('fr-FR completed: false (16 / 161)')
@@ -68,7 +71,7 @@ module SmartlingRails
         allow($stdout).to receive(:puts) { "mock puts" }
         allow(my_smartling).to receive(:upload).and_return('')
         processor.upload_english_file()
-        expect(my_smartling).to have_received(:upload).once.with('config/locales/en-us.yml', '/files/adam-test-resume-[mock-branch]-en-us.yml', 'YAML')
+        expect(my_smartling).to have_received(:upload).once.with('config/locales/en-us.yml', '/files/[mock-app]-[mock-branch]-en-us.yml', 'YAML')
       end
     end
 
@@ -82,7 +85,7 @@ module SmartlingRails
     describe 'upload_file_path' do
       it 'returns the constructed path for smartling' do
         allow(processor).to receive(:get_current_branch).and_return("mock-branch")
-        expect(processor.upload_file_path).to eq "/files/[mock-app]-[mock_branch]-en-us.yml"
+        expect(processor.upload_file_path).to eq "/files/[mock-app]-[mock-branch]-en-us.yml"
       end
     end
 
@@ -103,6 +106,7 @@ module SmartlingRails
       it 'calls fix_file_issues on the smartling_file' do
         allow(processor).to receive(:get_file_for_locale).and_return(mock_raw_smartling_file)
         allow(processor).to receive(:save_to_local_file).and_return('')
+        mock_raw_smartling_file.stub(:fix_file_issues)
         processor.fetch_fix_and_save_file_for_locale(mock_french_locale)
         expect(mock_raw_smartling_file).to have_received(:fix_file_issues)
       end
@@ -116,14 +120,14 @@ module SmartlingRails
 
     describe 'get_file_for_locale' do
       it 'initializes a smartling_file object' do
-        smartling_file = processor.get_file_for_locale(SmartlingRails.locales[:French])
+        smartling_file = processor.get_file_for_locale(SmartlingRails.locales['French'])
         expect(smartling_file.file_contents).to eq ''
         expect(smartling_file.locale_codes).to eq mock_french_locale
       end
 
       it 'initializes a smartling_file object' do
         allow(my_smartling).to receive(:download).and_return('file from smartling')
-        smartling_file = processor.get_file_for_locale(SmartlingRails.locales[:French])
+        smartling_file = processor.get_file_for_locale(SmartlingRails.locales['French'])
         expect(smartling_file.file_contents).to eq 'file from smartling'
       end
     end

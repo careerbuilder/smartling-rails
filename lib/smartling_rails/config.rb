@@ -3,18 +3,14 @@ module SmartlingRails
     attr_accessor :api_key, :project_id, :rails_app_name, :locales
 
     def initialize
-      #TODO source from yaml file
-      puts "locales should source from a yaml file"
-      @locales = {French: {smartling:'fr-FR', careerbuilder:'fr-fr'},
-              German: {smartling:'de-DE', careerbuilder:'de-de'},
-              Dutch: {smartling:'nl-NL', careerbuilder:'nl-nl'},
-              Italian: {smartling:'it-IT', careerbuilder:'it-it'},
-              Swedish: {smartling:'sv-SE', careerbuilder:'se-se'},
-              Chinese: {smartling:'zh-CN', careerbuilder:'zh-cn'},
-              Spanish: {smartling:'es-ES', careerbuilder:'es-es'},
-              FrenchCanadian: {smartling:'fr-CA', careerbuilder:'fr-ca'},
-              Greek: {smartling:'el-GR', careerbuilder:'gr-gr'}}
+      load_locales_from_yaml
       import_env_variables()
+    end
+
+    def load_locales_from_yaml
+      config_file_path = 'config/smartling_rails.yml'
+      throw "Localization File Missing '/config/smartling_rails.yml'" unless File.exist?(config_file_path)
+      @locales = YAML::load_file(config_file_path)['locales']
     end
 
     def import_env_variables

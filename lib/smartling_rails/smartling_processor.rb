@@ -68,7 +68,7 @@ module SmartlingRails
       smartling_file = SmartlingFile.new('', locale_codes)
       SmartlingRails.print_msg "Downloading #{locale_codes['smartling']}:", true
       begin
-        smartling_file.file_contents = @my_smartling.download(upload_file_path, :locale => locale_codes[:smartling])
+        smartling_file.file_contents = @my_smartling.download(upload_file_path, :locale => locale_codes['smartling'])
         SmartlingRails.print_msg "file loaded..."
       rescue Exception => e
         SmartlingRails.print_msg e

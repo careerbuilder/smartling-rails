@@ -5,7 +5,7 @@ module SmartlingRails
     before {
       @raw_yaml = "---\nde-DE:\n    test: \n"
       @corrected_yaml = "de-de:\n  test:\n"
-      @locale = {smartling: 'de-DE', careerbuilder: 'de-de'}
+      @locale = {'smartling' => 'de-DE', 'custom' => 'de-de'}
     }
     let(:smartling_file) { SmartlingFile.new(@raw_yaml,@locale) }
     

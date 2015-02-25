@@ -126,7 +126,28 @@ Local `.env` file
 >SMARTLING_APP_NAME=[your_app name_id]
 
 ENV (pending)
-Yaml (pending)
+
+**Yaml file**
+Defining which locales your application supports can be done via yaml configuration file.  If this file is missing there will be an exception.  If this file is blank you will not be able to check status or get your localizations.
+
+The configuration file needs to reside in the `config/` folder and be called `smartling_rails.yml`.  Here is an example:
+
+```
+locales:
+  French:
+    smartling: fr-FR
+    custom: fr-fr
+  German:
+    smartling: de-DE
+    custom: de-de
+  Dutch:
+    smartling: nl-NL
+    custom: nl-nl
+  Italian:
+    smartling: it-IT
+    custom: it-it
+...
+```
 
 ## dependencies
 smartling_rails is dependant on the [smartling gem](https://rubygems.org/gems/smartling) version 0.5.1 or higher. 

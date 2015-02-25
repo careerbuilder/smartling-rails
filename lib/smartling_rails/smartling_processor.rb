@@ -13,12 +13,12 @@ module SmartlingRails
     def get_file_statuses
       SmartlingRails.print_msg("Checking status for #{supported_locales}", true)
       SmartlingRails.locales.each do |language, codes|
-        check_file_status(codes[:smartling])
+        check_file_status(codes['smartling'])
       end
     end
 
     def supported_locales
-      SmartlingRails.locales.map { |language, codes| language.to_s + ' ' + codes[:smartling] }
+      SmartlingRails.locales.map { |language, codes| language.to_s + ' ' + codes['smartling'] }
     end
 
     def check_file_status(language_code)
@@ -48,7 +48,7 @@ module SmartlingRails
     end
 
     def upload_file_path()
-      "/files/[#{SmartlingRails.configuration.rails_app_name}]-[#{get_current_branch}]-en-us.yml"
+      "/files/[#{SmartlingRails.configuration.rails_app_name || 'app'}]-[#{get_current_branch}]-en-us.yml"
     end
 
     def get_files
@@ -61,12 +61,12 @@ module SmartlingRails
     def fetch_fix_and_save_file_for_locale(locale_codes)
       smartling_file = get_file_for_locale(locale_codes)
       smartling_file.fix_file_issues()
-      save_to_local_file(smartling_file.file_contents, locale_codes[:careerbuilder])
+      save_to_local_file(smartling_file.file_contents, locale_codes['custom'])
     end
 
     def get_file_for_locale(locale_codes)
       smartling_file = SmartlingFile.new('', locale_codes)
-      SmartlingRails.print_msg "Downloading #{locale_codes[:smartling]}:", true
+      SmartlingRails.print_msg "Downloading #{locale_codes['smartling']}:", true
       begin
         smartling_file.file_contents = @my_smartling.download(upload_file_path, :locale => locale_codes[:smartling])
         SmartlingRails.print_msg "file loaded..."

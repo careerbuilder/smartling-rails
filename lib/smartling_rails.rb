@@ -1,4 +1,6 @@
 require 'smartling'
+require 'yaml'
+
 Dir[File.dirname(__FILE__) + '/smartling_rails/**/*.rb'].each { |file| require file }
 
 module SmartlingRails
@@ -12,15 +14,15 @@ module SmartlingRails
   end
 
   def self.api_key
-    @configuration.api_key
+    configuration.api_key
   end
 
   def self.project_id
-    @configuration.project_id
+    configuration.project_id
   end
 
   def self.locales
-    @configuration.locales
+    configuration.locales
   end
 
   def self.processor

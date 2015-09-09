@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = 'The CareerBuilder.com Consumer Development teams'
   s.email       = 'opensource@careerbuilder.com'
-  s.homepage    = 'https://github.com/careerbuilder/smartling-rails/'
+  s.homepage    = 'https://github.com/careerbuilder/smartling-rails'
   s.summary     = 'Smartling support library for automation of rails platforms using I18N'
   s.description = 'Smartling support library for automation of rails platforms using I18N'
   s.license     = 'Apache-2.0'

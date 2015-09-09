@@ -7,10 +7,11 @@ Gem::Specification.new do |s|
   s.version     = SmartlingRails::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = 'The CareerBuilder.com Consumer Development teams'
-  s.email       = 'ConsumerDevelopment@careerbuilder.com'
-  s.homepage    = 'http://m.careerbuilder.com'
+  s.email       = 'opensource@careerbuilder.com'
+  s.homepage    = 'https://github.com/careerbuilder/smartling-rails'
   s.summary     = 'Smartling support library for automation of rails platforms using I18N'
   s.description = 'Smartling support library for automation of rails platforms using I18N'
+  s.license     = 'Apache-2.0'
 
   s.files        = Dir['{lib}/**/*.rb', '*.md', '{lib}/tasks/*.rake']
   s.require_path = 'lib'

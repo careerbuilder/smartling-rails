@@ -3,6 +3,8 @@ SmartlingRails is a gem making localization with the [smartling](www.smartling.c
 
 Communication with smartling is done via their APIs and leverages the [smartling gem](https://rubygems.org/gems/smartling).
 
+If you are interested in helping out / contributing to this project please read [CONTRIBUTING guide](https://github.com/careerbuilder/smartling-rails/blob/master/CONTRIBUTING.md)
+
 ## overview
 The uploading of [rials I18N](http://guides.rubyonrails.org/i18n.html) files to smartling, monitoring their translation status, and pulling them all back down into your `config/localization` folder is a very manual process.
 

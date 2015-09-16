@@ -8,16 +8,21 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and limitations under the License.
-require 'simplecov'
 require 'pry'
 require 'ostruct'
 require 'yaml'
+require 'smartling_rails'
+require 'webmock/rspec'
+WebMock.disable_net_connect!(allow: 'codeclimate.com')
 
+require 'simplecov'
+require 'codeclimate-test-reporter'
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+    SimpleCov::Formatter::HTMLFormatter,
+    CodeClimate::TestReporter::Formatter
+]
 SimpleCov.start do
   add_filter '/spec/'
   add_group 'models', 'lib/smarlting_rails/models'
 end
 
-require 'smartling_rails'
-
-# Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }

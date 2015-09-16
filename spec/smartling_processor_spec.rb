@@ -2,7 +2,7 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,19 +12,19 @@ require 'spec_helper'
 
 module SmartlingRails
   describe SmartlingProcessor do
-    
-    let(:processor) { SmartlingRails::SmartlingProcessor.new}
-    let(:my_smartling) {double('my_smartling', :status => nil)}
-    let(:mock_french_locale) { {'smartling' => 'fr-FR', 'custom' => 'fr-fr'} }
+
+    let(:processor) { SmartlingRails::SmartlingProcessor.new }
+    let(:my_smartling) { double('my_smartling', status: nil) }
+    let(:mock_french_locale) { { 'smartling' => 'fr-FR', 'custom' => 'fr-fr' } }
     let(:mock_raw_french_yaml) { "---\nfr-FR:\n    test: \n        hello: 'bonjour'" }
     let(:mock_raw_smartling_file) { SmartlingRails::SmartlingFile.new(mock_raw_french_yaml, mock_french_locale) }
-    before {
+    before do
       allow(File).to receive(:exist?).with('config/smartling_rails.yml').and_return(true)
       allow(File).to receive(:exist?).with('.env').and_return(false)
-      allow(YAML).to receive(:load_file).and_return({'locales' => {'French' => {'smartling' => 'fr-FR', 'custom' => 'fr-fr'}, 'German' => {'smartling' => 'de-DE', 'custom' => 'de-de'} } })
+      allow(YAML).to receive(:load_file).and_return('locales' => { 'French' => { 'smartling' => 'fr-FR', 'custom' => 'fr-fr' }, 'German' => { 'smartling' => 'de-DE', 'custom' => 'de-de' } })
       SmartlingRails.configure { |config| config.rails_app_name = 'mock-app' }
       processor.my_smartling = my_smartling
-    }
+    end
 
     describe 'initialize' do
       it 'xxx' do
@@ -34,33 +34,47 @@ module SmartlingRails
     describe 'get_file_statuses' do
       it 'loops over locales and checks each one' do
         processor.should_receive(:check_file_status).at_least(SmartlingRails.configuration.locales.count).times
-        processor.get_file_statuses
+        processor.file_statuses
       end
     end
 
     describe 'supported_locales' do
       it 'should return an output friendly array of supported locales' do
-        expect(processor.supported_locales).to eq ["French fr-FR", "German de-DE"]
+        expect(processor.supported_locales).to eq ['French fr-FR', 'German de-DE']
       end
     end
 
     describe 'check_file_status' do
       it 'gracefully handles lack of smartling credentials' do
-        allow($stdout).to receive(:puts) { "mock puts" }
-        allow(my_smartling).to receive(:status) { raise "Missing parameters: [:apiKey, :projectId]" }
+        allow($stdout).to receive(:puts) { 'mock puts' }
+        allow(my_smartling).to receive(:status) { fail 'Missing parameters: [:apiKey, :projectId]' }
         processor.check_file_status('fr-FR')
         expect($stdout).to have_received(:puts).with('Missing parameters: [:apiKey, :projectId]')
       end
       it 'knows when processing is comlete' do
-        allow($stdout).to receive(:puts) { "mock puts" }
-        result = {"fileUri"=>"/files/[mock-app]-[mock-branch]-en-us-.yml", "lastUploaded"=>"2015-02-21T19:56:23", "stringCount"=>161, "fileType"=>"yaml", "wordCount"=>664, "callbackUrl"=>nil, "approvedStringCount"=>161, "completedStringCount"=>161}
+        allow($stdout).to receive(:puts) { 'mock puts' }
+        result = { 'fileUri' => '/files/[mock-app]-[mock-branch]-en-us-.yml',
+                   'lastUploaded' => '2015-02-21T19:56:23',
+                   'stringCount' => 161,
+                   'fileType' => 'yaml',
+                   'wordCount' => 664,
+                   'callbackUrl' => nil,
+                   'approvedStringCount' => 161,
+                   'completedStringCount' => 161 }
         allow(my_smartling).to receive(:status).and_return(result)
         processor.check_file_status('fr-FR')
         expect($stdout).to have_received(:puts).with('fr-FR completed: true (161 / 161)')
       end
       it 'knows when processing is not comlete' do
-        allow($stdout).to receive(:puts) { "mock puts" }
-        result = {"fileUri"=>"/files/[mock-app]-[ver-interim-translations]-en-us-.yml", "lastUploaded"=>"2015-02-21T19:56:23", "stringCount"=>161, "fileType"=>"yaml", "wordCount"=>664, "callbackUrl"=>nil, "approvedStringCount"=>10, "completedStringCount"=>16}
+        allow($stdout).to receive(:puts) { 'mock puts' }
+        result = { 'fileUri' => '/files/[mock-app]-[ver-interim-translations]-en-us-.yml',
+                   'lastUploaded' => '2015-02-21T19:56:23',
+                   'stringCount' => 161,
+                   'fileType' => 'yaml',
+                   'wordCount' => 664,
+                   'callbackUrl' => nil,
+                   'approvedStringCount' => 10,
+                   'completedStringCount' => 16 }
         allow(my_smartling).to receive(:status).and_return(result)
         processor.check_file_status('fr-FR')
         expect($stdout).to have_received(:puts).with('fr-FR completed: false (16 / 161)')
@@ -69,40 +83,41 @@ module SmartlingRails
 
     describe 'put_files' do
       it 'calls upload_english_file' do
-        allow(processor).to receive(:upload_english_file) { "mock puts" }
-        processor.put_files()
+        allow(processor).to receive(:upload_english_file) { 'mock puts' }
+        processor.put_files
         expect(processor).to have_received(:upload_english_file).once
       end
     end
 
     describe 'upload_english_file' do
       it 'calls smartling upload with the correct files and types' do
-        processor.should_receive(:`).at_least(1).times.with("git branch").and_return("* mock-branch\n  master\n  update-readme")
-        allow($stdout).to receive(:puts) { "mock puts" }
+        processor.should_receive(:`).at_least(1).times.with('git branch').and_return("* mock-branch\n  master\n  update-readme")
+        allow($stdout).to receive(:puts) { 'mock puts' }
         allow(my_smartling).to receive(:upload).and_return('')
-        processor.upload_english_file()
-        expect(my_smartling).to have_received(:upload).once.with('config/locales/en-us.yml', '/files/[mock-app]-[mock-branch]-en-us.yml', 'YAML')
+        processor.upload_english_file
+        expect(my_smartling).to have_received(:upload).once.with('config/locales/en-us.yml',
+                                                                 '/files/[mock-app]-[mock-branch]-en-us.yml', 'YAML')
       end
     end
 
     describe 'local_file_path_for_locale' do
       it 'correctly defines the local file path besed on hostsite' do
-        expect(processor.local_file_path_for_locale('de-de')).to eq "config/locales/de-de.yml"
-        expect(processor.local_file_path_for_locale('en-ca')).to eq "config/locales/en-ca.yml"
+        expect(processor.local_file_path_for_locale('de-de')).to eq 'config/locales/de-de.yml'
+        expect(processor.local_file_path_for_locale('en-ca')).to eq 'config/locales/en-ca.yml'
       end
     end
 
     describe 'upload_file_path' do
       it 'returns the constructed path for smartling' do
-        allow(processor).to receive(:get_current_branch).and_return("mock-branch")
-        expect(processor.upload_file_path).to eq "/files/[mock-app]-[mock-branch]-en-us.yml"
+        allow(processor).to receive(:current_branch).and_return('mock-branch')
+        expect(processor.upload_file_path).to eq '/files/[mock-app]-[mock-branch]-en-us.yml'
       end
     end
 
     describe 'get_files' do
       it 'should call fetch_fix_and_save_file_for_locale for each locale' do
         processor.should_receive(:fetch_fix_and_save_file_for_locale).at_least(SmartlingRails.configuration.locales.count).times
-        processor.get_files
+        processor.files
       end
     end
 
@@ -152,11 +167,10 @@ module SmartlingRails
 
     describe 'get_current_branch' do
       it 'returns the branch name indicated by * from the "git brach" command' do
-        processor.should_receive(:`).at_least(1).times.with("git branch").and_return("* adding-tests\n  master\n  update-readme")
-        expect(processor.get_current_branch).to eq 'adding-tests'
+        processor.should_receive(:`).at_least(1).times.with('git branch').and_return("* adding-tests\n  master\n  update-readme")
+        expect(processor.current_branch).to eq 'adding-tests'
       end
     end
-    
+
   end
 end
- 

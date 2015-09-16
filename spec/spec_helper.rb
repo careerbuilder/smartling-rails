@@ -18,8 +18,8 @@ WebMock.disable_net_connect!(allow: 'codeclimate.com')
 require 'simplecov'
 require 'codeclimate-test-reporter'
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
-    SimpleCov::Formatter::HTMLFormatter,
-    CodeClimate::TestReporter::Formatter
+  SimpleCov::Formatter::HTMLFormatter,
+  CodeClimate::TestReporter::Formatter
 ]
 SimpleCov.start do
   add_filter '/spec/'

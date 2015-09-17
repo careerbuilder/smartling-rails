@@ -1,6 +1,6 @@
-# Welcome to Smartling Rails
 [![Code Climate](https://codeclimate.com/repos/55f99e9b6956802d07000250/badges/b041b1a94ba97adc7619/gpa.svg)](https://codeclimate.com/repos/55f99e9b6956802d07000250/feed)
-[![Test Coverage](https://codeclimate.com/repos/55f99e9b6956802d07000250/badges/b041b1a94ba97adc7619/coverage.svg)](https://codeclimate.com/repos/55f99e9b6956802d07000250/coverage)
+[![Test Coverage](https://codeclimate.com/repos/55f99e9b6956802d07000250/badges/b041b1a94ba97adc7619/coverage.svg)](https://codeclimate.com/repos/55f99e9b6956802d07000250/coverage)[![Gem Version](https://badge.fury.io/rb/smartling_rails.svg)](http://badge.fury.io/rb/smartling_rails)
+# Welcome to Smartling Rails
 SmartlingRails is a gem making localization with the [smartling](www.smartling.com) localization service easier in a ruby on rails environment. The Gem simplifies the uploading, status checking, and retrieval of information from smartling into a rails app that uses I18N localization.
 
 Communication with smartling is done via their APIs and leverages the [smartling gem](https://rubygems.org/gems/smartling).

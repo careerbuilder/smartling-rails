@@ -13,12 +13,12 @@ module SmartlingRails
 
     def initialize
       @my_smartling = Smartling::File.new(apiKey: SmartlingRails.api_key, projectId: SmartlingRails.project_id)
-      SmartlingRails.print_msg "You are working with this remote file on smartling: #{upload_file_path}", true
-      SmartlingRails.print_msg "Smartling Ruby client #{Smartling::VERSION}"
+      SmartlingRails.print_msg "You are working with this remote file on smartling: #{ upload_file_path }", true
+      SmartlingRails.print_msg "Smartling Ruby client #{ Smartling::VERSION }"
     end
 
     def file_statuses
-      SmartlingRails.print_msg("Checking status for #{supported_locales}", true)
+      SmartlingRails.print_msg("Checking status for #{ supported_locales }", true)
       SmartlingRails.locales.each do | _language, codes |
         check_file_status(codes['smartling'])
       end
@@ -33,7 +33,7 @@ module SmartlingRails
       total_strings =  res['stringCount'].to_i
       completed_strings =  res['completedStringCount'].to_i
       file_complete = completed_strings >= total_strings
-      SmartlingRails.print_msg "#{language_code} completed: #{file_complete} (#{completed_strings} / #{total_strings})"
+      SmartlingRails.print_msg "#{language_code} completed: #{ file_complete } (#{ completed_strings } / #{ total_strings })"
     rescue Exception => e
       puts e.message
     end
@@ -44,20 +44,20 @@ module SmartlingRails
     end
 
     def upload_english_file
-      SmartlingRails.print_msg("uploading #{local_file_path_for_locale('en-us')} to #{upload_file_path}")
+      SmartlingRails.print_msg("uploading #{ local_file_path_for_locale('en-us') } to #{ upload_file_path }")
       @my_smartling.upload(local_file_path_for_locale('en-us'), upload_file_path, 'YAML')
     end
 
     def local_file_path_for_locale(cb_locale)
-      "config/locales/#{cb_locale}.yml"
+      "config/locales/#{ cb_locale }.yml"
     end
 
     def upload_file_path
-      "/files/[#{SmartlingRails.configuration.rails_app_name || 'app'}]-[#{current_branch}]-en-us.yml"
+      "/files/[#{ SmartlingRails.configuration.rails_app_name || 'app' }]-[#{ current_branch }]-en-us.yml"
     end
 
     def files
-      SmartlingRails.print_msg("Checking status for #{supported_locales}", true)
+      SmartlingRails.print_msg("Checking status for #{ supported_locales }", true)
       SmartlingRails.locales.each do | _language, locale_codes |
         fetch_fix_and_save_file_for_locale(locale_codes)
       end
@@ -71,7 +71,7 @@ module SmartlingRails
 
     def get_file_for_locale(locale_codes)
       smartling_file = SmartlingFile.new('', locale_codes)
-      SmartlingRails.print_msg "Downloading #{locale_codes['smartling']}:", true
+      SmartlingRails.print_msg "Downloading #{ locale_codes['smartling'] }:", true
       begin
         smartling_file.file_contents = @my_smartling.download(upload_file_path, locale: locale_codes['smartling'])
         SmartlingRails.print_msg 'file loaded...'

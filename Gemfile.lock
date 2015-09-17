@@ -1,13 +1,18 @@
 PATH
   remote: .
   specs:
-    smartling_rails (0.0.8)
+    smartling_rails (0.0.9)
       smartling (~> 0.5)
 
 GEM
   remote: http://rubygems.org/
   specs:
+    addressable (2.3.8)
+    codeclimate-test-reporter (0.4.8)
+      simplecov (>= 0.7.1, < 1.0.0)
     coderay (1.1.0)
+    crack (0.4.2)
+      safe_yaml (~> 1.0.0)
     diff-lcs (1.2.5)
     docile (1.1.5)
     domain_name (0.5.24)
@@ -15,7 +20,7 @@ GEM
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     method_source (0.8.2)
-    mime-types (2.6.1)
+    mime-types (2.6.2)
     multi_json (1.10.1)
     netrc (0.10.3)
     pry (0.10.1)
@@ -37,6 +42,7 @@ GEM
     rspec-mocks (2.99.2)
     rspec-pride (2.3.0)
       rspec (~> 2.10)
+    safe_yaml (1.0.4)
     simplecov (0.9.1)
       docile (~> 1.1.0)
       multi_json (~> 1.0)
@@ -49,14 +55,19 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.1)
+    webmock (1.21.0)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  codeclimate-test-reporter
   pry (~> 0.9)
   rake (~> 0.8)
   rspec (~> 2.11)
   rspec-pride (~> 2.2, >= 2.2.0)
   simplecov (~> 0.7, >= 0.7.1)
   smartling_rails!
+  webmock (~> 1.21)

@@ -1,4 +1,4 @@
-$:.push File.expand_path('../lib', __FILE__)
+$LOAD_PATH.push File.expand_path('../lib', __FILE__)
 
 require 'smartling_rails/version'
 
@@ -23,4 +23,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec', '~> 2.11'
   s.add_development_dependency 'rspec-pride', '~> 2.2', '>= 2.2.0'
   s.add_development_dependency 'pry', '~> 0.9'
+  s.add_development_dependency 'codeclimate-test-reporter'
+  s.add_development_dependency 'webmock', '~> 1.21'
 end

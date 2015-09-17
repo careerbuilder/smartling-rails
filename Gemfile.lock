@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    smartling_rails (0.0.8)
+    smartling_rails (0.0.9)
       smartling (~> 0.5)
 
 GEM
@@ -20,7 +20,7 @@ GEM
     http-cookie (1.0.2)
       domain_name (~> 0.5)
     method_source (0.8.2)
-    mime-types (2.6.1)
+    mime-types (2.6.2)
     multi_json (1.10.1)
     netrc (0.10.3)
     pry (0.10.1)
@@ -71,6 +71,3 @@ DEPENDENCIES
   simplecov (~> 0.7, >= 0.7.1)
   smartling_rails!
   webmock (~> 1.21)
-
-BUNDLED WITH
-   1.10.6

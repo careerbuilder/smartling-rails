@@ -1,0 +1,22 @@
+language: ruby
+rvm:
+- 2.3
+cache: bundler
+sudo: false
+script: bundle exec rspec
+notifications:
+  email: false
+  hipchat:
+    rooms:
+      secure: Zfx0rPFilxS9pkwYMcdk85dOU3ucrW8PaZJtKeQKyt39TlIRtU/kFn+9SVSK9294q6RNU1wDQl+Y+4QZgytDoHF5GOIh5aqdOloj+q5M8oJH4XlvHV2FEh2hrfeOerV+F+YFt0eN1bFAiqUzah/zXlhpMJLMOG5sg8KjRIFbYLI=
+  template:
+  - "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}"
+  notify: true
+deploy:
+  provider: rubygems
+  api_key:
+    secure: xbPnJgJhBY68oCH4byWOr/8JBG8wIp9Cvfhu01C5qLzZj2FX1QsrmxVmR6GFsNb1SWqsyTJ5y3GPWO7AUfqYgLwPFTpsqS0DJKjZo7hi5CELQ+fukhoPIr5nQdnDSUqCm6/gKgYHvnJy585BzAFhGKLNsm7Yxl1zQKULwCwTJ8s=
+  gem: smartling_rails
+  on:
+    branch: master
+    repo: careerbuilder/smartling-rails
